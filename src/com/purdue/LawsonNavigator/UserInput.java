@@ -10,7 +10,6 @@ package com.purdue.LawsonNavigator;
  *		- user's current floor; basement, first, second, third
  *		- user's method of moving; stairs or elevators
  *		- user's final destination; in terms of a room number
- *	INCOMPLETE
  */
 
 public class UserInput {
@@ -20,6 +19,8 @@ public class UserInput {
 	private double latitude;
 	private double longitude;
 	private String roomNumber;
+	private String nonAcademicRoom;
+	private String professorName;
 	
 	// to include:
 	// professor name/ room number
@@ -33,14 +34,18 @@ public class UserInput {
 		latitude = 0; 
 		longitude = 0;
 		roomNumber = null;
+		nonAcademicRoom = null;
+		professorName = null;
 	}
 	
-	public UserInput(Transport transport, Floor floor, double latitude, double longitude, String roomNumber) {
+	public UserInput(Transport transport, Floor floor, double latitude, double longitude, String roomNumber, String nonAcademicRoom, String professorName) {
 		this.transport = transport;
 		this.floor = floor;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.roomNumber = roomNumber;
+		this.nonAcademicRoom = nonAcademicRoom;
+		this.professorName = professorName;
 	}
 	
 	public Transport getTransport() { return transport; }
@@ -50,6 +55,12 @@ public class UserInput {
 	public double getLatitude() { return latitude; }
 	
 	public double getLongitude() { return longitude; }
+	
+	public String getRoomNumber() {return roomNumber;}
+	
+	public String getNonAcademicRoom() {return nonAcademicRoom;}
+	
+	public String getProfessorName() {return professorName;}
 	
 	
 	public void setTransport(Transport transport) {
@@ -66,5 +77,17 @@ public class UserInput {
 	
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
+	}
+	
+	public void setRoomNumber(String roomNumber) {
+		this.roomNumber = roomNumber;
+	}
+	
+	public void setNonAcademicRoom(String nonAcademicRoom) {
+		this.nonAcademicRoom = nonAcademicRoom;
+	}
+	
+	public void setProfessorName(String professorName) {
+		this.professorName = professorName;
 	}
 }
