@@ -21,7 +21,7 @@ public class RoomNumber extends Activity {
 	private RadioButton stairs, elevator, base, first, second, third;
 	private Spinner spinner;
 	private UserInput getRoomMap = new UserInput();
-	private LawsonNavigatorvActivity saved = new LawsonNavigatorvActivity();
+	private LawsonNavigatorActivity saved = new LawsonNavigatorActivity();
 	private String finalRoom;
 	private Floor floor = Floor.BASEMENT;
 	private Transport transport = Transport.ELEVATOR;
