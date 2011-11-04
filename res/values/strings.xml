@@ -1,28 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, Team2ProjectActivity!</string>
-    <string name="app_name">Team2Project</string>
-    <string name="MainMenu">Main Menu</string>
-    <string name="Button1">Room Number</string>
-    <string name="Button2">"Professor's Name"</string>
-    <string name="Button3">Non-academic Rooms</string>
-    <string name="Button4">Floor Plans</string>
-    <string name="Button5">Exit</string>
-    <string name="Button6">Options</string>
-    <string name="RoomNumber">Room Number</string>
-    <string name="Room">Room</string>
-    <string name="Room1">Room:</string>
-    <string name="Stairs">Stairs</string>
-    <string name="Elevator">Elevator</string>
-    <string name="Floor1">1</string>
-    <string name="Floor2">2</string>
-    <string name="Floor3">3</string>
-    <string name="FloorB">B</string>
-    <string name="StartingFloor">Starting Floor</string>
-    <string name="professorname">Professor Name</string>
-    <string name="Name">Name</string>
-    <string name="Name1">Name:</string>
-    <string name="OtherLocations">Other Locations</string>
-    <string name="Location">Location:</string>
-    <string name="Go">Go</string>
+
+    <string name="hello">Hello World, LawsonNavigatorvActivity!</string>
+    <string name="app_name">Lawson Navigator v1.0</string>
+
 </resources>

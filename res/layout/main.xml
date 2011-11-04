@@ -1,13 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
-    <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView1" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" android:text="@string/MainMenu" android:textSize="40dp"></TextView>
-    <Button android:id="@+id/button1" android:width="75dp" android:layout_below="@+id/textView1" android:layout_centerHorizontal="true" android:layout_marginTop="25dp" android:layout_height="50dp" android:textSize="20dp" android:text="@string/Button1" android:layout_width="225dp"></Button>
-    <Button android:id="@+id/button2" android:layout_below="@+id/button1" android:layout_centerHorizontal="true" android:layout_marginTop="26dp" android:layout_height="50dp" android:textSize="20dp" android:text="@string/Button2" android:layout_width="225dp"></Button>
-    <Button android:id="@+id/button3" android:layout_below="@+id/button2" android:layout_centerHorizontal="true" android:layout_marginTop="26dp" android:layout_height="50dp" android:textSize="20dp" android:text="@string/Button3" android:layout_width="225dp"></Button>
-    <Button android:id="@+id/button4" android:layout_below="@+id/button3" android:layout_centerHorizontal="true" android:layout_marginTop="26dp" android:layout_height="50dp" android:textSize="20dp" android:layout_width="225dp" android:text="@string/Button4"></Button>
-    <Button android:text="@string/Button6" android:layout_height="50dp" android:id="@+id/button6" android:textSize="20dp" android:layout_below="@+id/button4" android:layout_centerHorizontal="true" android:layout_marginTop="50dp" android:layout_width="175dp"></Button>
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Main Menu"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="45dp" >
+
+    </TextView>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="200dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" >
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/roomNum"
+            android:layout_width="185dp"
+            android:layout_height="65dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="350dp"
+            android:text="Room Number"
+            android:textSize="22dp" />
+
+
+
+
+        <Button
+            android:id="@+id/profName"
+            android:layout_width="185dp"
+            android:layout_height="65dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="275dp"
+            android:paddingTop="1dp"
+            android:text="Professor&apos;s Name"
+            android:textSize="22dp" />
+
+
+
+
+        <Button
+            android:id="@+id/nonAcaRoom"
+            android:layout_width="185dp"
+            android:layout_height="65dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="200dp"
+            android:paddingTop="1dp"
+            android:text="Non-Academic Rooms"
+            android:textSize="22dp" />
+
+        <Button
+            android:id="@+id/floorPlan"
+            android:layout_width="185dp"
+            android:layout_height="65dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="126dp"
+            android:text="Floor Plans"
+            android:textSize="22dp" />
+
+        <Button
+            android:id="@+id/options"
+            android:layout_width="185dp"
+            android:layout_height="65dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:text="Options"
+            android:textSize="22dp" />
+
+    </RelativeLayout>
+
 </RelativeLayout>
