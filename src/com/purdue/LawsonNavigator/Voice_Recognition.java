@@ -1,3 +1,11 @@
+/*
+Voice_Recognition.java
+Written by Ryan Thompson
+
+Demonstrates text-to-speech and voice recognition.
+Unfinished and not linked with main program
+*/
+
 package com.purdue.LawsonNavigator;
 
 import java.util.List;
@@ -300,12 +308,10 @@ public class Voice_Recognition extends Activity{
 	    			if (results.get(0).equals("stairs")){
 	    				transport = Transport.STAIRS;
 	    				prompt = 0;
-	    				startVoiceRecognitionActivity();
 	    			}
 	    			else if (results.get(0).equals("elevator")){
 	    				transport = Transport.ELEVATOR;
 	    				prompt = 0;
-	    				startVoiceRecognitionActivity();
 	    			}
 	    			else{
 	    				prompt = 5;

@@ -57,11 +57,13 @@ public class UserInput {
 	
 	public double getLongitude() { return longitude; }
 	
+	//Added by Ryan Start
 	public String getRoomNumber() {return roomNumber;}
 	
 	public String getNonAcademicRoom() {return nonAcademicRoom;}
 	
 	public String getProfessorName() {return professorName;}
+	//Added by Ryan End
 	
 	
 	public void setTransport(Transport transport) {
@@ -80,6 +82,7 @@ public class UserInput {
 		this.latitude = latitude;
 	}
 	
+	//Added by Ryan Start
 	public void setRoomNumber(String roomNumber) {
 		this.roomNumber = roomNumber;
 	}
@@ -91,4 +94,5 @@ public class UserInput {
 	public void setProfessorName(String professorName) {
 		this.professorName = professorName;
 	}
+	//Added by Ryan End
 }
