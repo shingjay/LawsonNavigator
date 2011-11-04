@@ -11,11 +11,46 @@
         android:label="@string/app_name" android:debuggable="true">
         <activity
             android:label="@string/app_name"
-            android:name=".LawsonNavigatorActivity" >
+            android:name="LawsonNavigatorActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:label="@string/app_name"
+            android:name="FloorPlanScreen" >
+            <intent-filter >
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:label="@string/app_name"
+            android:name="NonAcademicRooms" >
+            <intent-filter >
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:label="@string/app_name"
+            android:name="Options" >
+            <intent-filter >
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:label="@string/app_name"
+            android:name="ProfScreen" >
+            <intent-filter >
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:label="@string/app_name"
+            android:name="RoomNumber" >
+            <intent-filter >
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
     </application>

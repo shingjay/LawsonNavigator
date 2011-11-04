@@ -17,13 +17,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
+import java.io.*;
+import java.net.*;
 
 public class FloorPlanScreen extends Activity {
 	private Button goButton, backButton;
 	private Spinner spinner;
 	private String finalFloor;
 	private static UserInput getRoomMap = new UserInput();
-	private LawsonNavigatorvActivity saved = new LawsonNavigatorvActivity();
+	private LawsonNavigatorActivity saved = new LawsonNavigatorActivity();
 	
 	public void onCreate(Bundle savedInstanceState) {
 		//starts screen and builds everything

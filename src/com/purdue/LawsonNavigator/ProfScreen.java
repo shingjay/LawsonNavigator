@@ -23,7 +23,7 @@ public class ProfScreen extends Activity {
 	private RadioButton stairs, elevator, base, first, second, third;
 	private Spinner spinner;
 	private UserInput getProfMap = new UserInput();
-	private LawsonNavigatorvActivity saved = new LawsonNavigatorvActivity();
+	private LawsonNavigatorActivity saved = new LawsonNavigatorActivity();
 	private String finalName;
 	private Floor floor = Floor.BASEMENT;
 	private Transport transport = Transport.ELEVATOR;
