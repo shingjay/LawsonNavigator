@@ -10,6 +10,7 @@ package com.purdue.LawsonNavigator;
  *		- user's current floor; basement, first, second, third
  *		- user's method of moving; stairs or elevators
  *		- user's final destination; in terms of a room number
+ *	INCOMPLETE
  */
 
 public class UserInput {
