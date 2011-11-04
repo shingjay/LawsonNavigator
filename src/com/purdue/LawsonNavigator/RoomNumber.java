@@ -15,6 +15,8 @@ import android.widget.*;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.view.*;
 import android.content.*;
+import java.io.*;
+import java.net.*;
 
 public class RoomNumber extends Activity {
 	private Button goButton, backButton;

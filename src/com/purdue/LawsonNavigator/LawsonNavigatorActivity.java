@@ -16,7 +16,7 @@ public class LawsonNavigatorActivity extends Activity
     private Voice_Recognition vr;
     public UserInput saved = new UserInput();
     
-    public LawsonNavigatorvActivity()
+    public LawsonNavigatorActivity()
     {
     	//used to access and set the saved information
     }
@@ -27,7 +27,7 @@ public class LawsonNavigatorActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 		PackageManager pm = getPackageManager();
-        vr = new Voice_Recognition(pm);
+        //vr = new Voice_Recognition(pm);
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         //saved = vr.start(intent);
         //getMapInfo();

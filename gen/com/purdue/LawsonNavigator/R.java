@@ -14,31 +14,41 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
+        public static final int LinearLayout1=0x7f050012;
         public static final int back=0x7f050007;
-        public static final int button1=0x7f050008;
-        public static final int button2=0x7f050009;
-        public static final int button3=0x7f05000a;
-        public static final int button4=0x7f05000b;
-        public static final int button6=0x7f05000c;
+        public static final int basement=0x7f050018;
+        public static final int button1=0x7f050009;
+        public static final int elevator=0x7f050014;
+        public static final int firstFloor=0x7f050019;
+        public static final int floorPlan=0x7f05000d;
         public static final int floorPlanChoice=0x7f050003;
         public static final int goFloorPlan=0x7f050006;
+        public static final int goNonAca=0x7f05001c;
+        public static final int goProf=0x7f050020;
+        public static final int goRoomNum=0x7f050022;
         public static final int linearLayout1=0x7f050004;
         public static final int linearLayout2=0x7f050001;
-        public static final int linearLayout3=0x7f050010;
-        public static final int linearLayout4=0x7f050012;
+        public static final int linearLayout4=0x7f050017;
+        public static final int linearLayout5=0x7f050015;
+        public static final int linearLayout6=0x7f050010;
         public static final int linearLayout7=0x7f050005;
-        public static final int radioButton1=0x7f05000e;
-        public static final int radioButton2=0x7f05000f;
-        public static final int radioButton3=0x7f050014;
-        public static final int radioButton4=0x7f050015;
-        public static final int radioButton5=0x7f050016;
-        public static final int radioButton6=0x7f050013;
-        public static final int saveOpt=0x7f050017;
-        public static final int spinner1=0x7f05000d;
+        public static final int nonAcaRoom=0x7f05000c;
+        public static final int nonRoomNumChoice=0x7f05000f;
+        public static final int options=0x7f05000e;
+        public static final int profChoice=0x7f05001f;
+        public static final int profName=0x7f05000b;
+        public static final int relativeLayout1=0x7f050008;
+        public static final int roomNum=0x7f05000a;
+        public static final int roomNumChoice=0x7f050021;
+        public static final int saveOpt=0x7f05001d;
+        public static final int secondFloor=0x7f05001a;
+        public static final int stairs=0x7f050013;
         public static final int textView1=0x7f050000;
         public static final int textView2=0x7f050002;
-        public static final int textView3=0x7f050011;
-        public static final int voiceBox=0x7f050018;
+        public static final int textView3=0x7f050016;
+        public static final int textView4=0x7f050011;
+        public static final int thirdFloor=0x7f05001b;
+        public static final int voiceBox=0x7f05001e;
     }
     public static final class layout {
         public static final int floorplans=0x7f030000;
@@ -49,30 +59,7 @@ public final class R {
         public static final int roomnumber=0x7f030005;
     }
     public static final class string {
-        public static final int Button1=0x7f040003;
-        public static final int Button2=0x7f040004;
-        public static final int Button3=0x7f040005;
-        public static final int Button4=0x7f040006;
-        public static final int Button5=0x7f040007;
-        public static final int Button6=0x7f040008;
-        public static final int Elevator=0x7f04000d;
-        public static final int Floor1=0x7f04000e;
-        public static final int Floor2=0x7f04000f;
-        public static final int Floor3=0x7f040010;
-        public static final int FloorB=0x7f040011;
-        public static final int Go=0x7f040018;
-        public static final int Location=0x7f040017;
-        public static final int MainMenu=0x7f040002;
-        public static final int Name=0x7f040014;
-        public static final int Name1=0x7f040015;
-        public static final int OtherLocations=0x7f040016;
-        public static final int Room=0x7f04000a;
-        public static final int Room1=0x7f04000b;
-        public static final int RoomNumber=0x7f040009;
-        public static final int Stairs=0x7f04000c;
-        public static final int StartingFloor=0x7f040012;
         public static final int app_name=0x7f040001;
         public static final int hello=0x7f040000;
-        public static final int professorname=0x7f040013;
     }
 }
