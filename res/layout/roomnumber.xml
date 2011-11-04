@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+    <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView1" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" android:textSize="40dp" android:text="@string/RoomNumber"></TextView>
+    <LinearLayout android:id="@+id/linearLayout2" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_below="@+id/textView1" android:layout_centerHorizontal="true" android:layout_marginTop="33dp">
+        <TextView android:layout_weight="1" android:layout_marginRight="5dp" android:layout_height="wrap_content" android:text="@string/Room1" android:textSize="30dp" android:id="@+id/textView2" android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_gravity="center_vertical"></TextView>
+        <Spinner android:layout_weight="1" android:layout_marginLeft="5dp" android:id="@+id/spinner1" android:layout_height="wrap_content" android:layout_width="200dp" android:layout_gravity="center_horizontal"></Spinner>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_below="@+id/linearLayout2" android:layout_centerHorizontal="true" android:layout_marginTop="40dp">
+        <RadioButton android:layout_height="wrap_content" android:id="@+id/radioButton1" android:text="@string/Stairs" android:layout_width="wrap_content" android:layout_marginRight="10dp"></RadioButton>
+        <RadioButton android:layout_height="wrap_content" android:id="@+id/radioButton2" android:text="@string/Elevator" android:layout_width="wrap_content" android:layout_marginLeft="10dp"></RadioButton>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/linearLayout3" android:orientation="vertical" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_below="@+id/linearLayout1" android:layout_marginTop="45dp" android:layout_centerHorizontal="true">
+        <TextView android:layout_weight="1" android:layout_height="0dp" android:layout_gravity="center_horizontal" android:text="@string/StartingFloor" android:textSize="30dp" android:id="@+id/textView3" android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_marginBottom="10dp"></TextView>
+        <LinearLayout android:layout_weight="1.48" android:id="@+id/linearLayout4" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:layout_width="wrap_content">
+            <RadioButton android:layout_marginRight="10dp" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:id="@+id/radioButton6" android:text="@string/FloorB" android:layout_width="wrap_content"></RadioButton>
+            <RadioButton android:layout_marginRight="10dp" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:id="@+id/radioButton3" android:layout_marginLeft="10dp" android:text="@string/Floor1" android:layout_width="wrap_content"></RadioButton>
+            <RadioButton android:layout_marginRight="10dp" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:id="@+id/radioButton4" android:layout_marginLeft="10dp" android:text="@string/Floor2" android:layout_width="wrap_content"></RadioButton>
+            <RadioButton android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:id="@+id/radioButton5" android:layout_marginLeft="10dp" android:text="@string/Floor3" android:layout_width="wrap_content"></RadioButton>
+        </LinearLayout>
+    </LinearLayout>
+    <Button android:layout_height="50dp" android:id="@+id/button1" android:textSize="20dp" android:text="@string/Go" android:layout_width="175dp" android:layout_below="@+id/linearLayout3" android:layout_centerHorizontal="true" android:layout_marginTop="40dp"></Button>
+    
+</RelativeLayout>
