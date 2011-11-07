@@ -2,6 +2,7 @@ package com.purdue.LawsonNavigator;
 
 import android.content.Context;
 import android.location.*;
+import android.os.SystemClock;
 import android.widget.Toast;
 
 public class getLocation
@@ -35,7 +36,7 @@ public class getLocation
 		if (location != null)
 		{
 			userLatLong.setLatitude(location.getLatitude());
-			userLatLong.setLatitude(location.getLongitude());
+			userLatLong.setLongitude(location.getLongitude());
 		}
 		else
 		{

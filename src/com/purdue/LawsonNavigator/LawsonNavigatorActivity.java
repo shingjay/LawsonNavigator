@@ -31,8 +31,9 @@ public class LawsonNavigatorActivity extends Activity
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         //saved = vr.start(intent);
         //getMapInfo();
-        location = new getLocation(getApplicationContext(), saved);
         setUpButton();
+        location = new getLocation(this.getApplicationContext(), saved);
+        Toast.makeText(getApplicationContext(), saved.getRoomNumber() + ":" + saved.getTransport() + ":" + saved.getFloor() + ":" + saved.getLatitude() + ":" + saved.getLongitude(), Toast.LENGTH_SHORT).show();
     }
     
     public void setUpButton()

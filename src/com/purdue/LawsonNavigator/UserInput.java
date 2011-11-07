@@ -3,6 +3,8 @@
  */
 package com.purdue.LawsonNavigator;
 
+import java.io.Serializable;
+
 /**
  * @author ong0
  *	class that contains all of the user input, consisting of:
@@ -13,7 +15,7 @@ package com.purdue.LawsonNavigator;
  *	INCOMPLETE
  */
 
-public class UserInput {
+public class UserInput implements Serializable {
 	
 	private Transport transport;
 	private Floor floor;
@@ -22,9 +24,6 @@ public class UserInput {
 	private String roomNumber;
 	private String nonAcademicRoom;
 	private String professorName;
-	
-	// to include:
-	// professor name/ room number
 	
 	/**
 	 * @category default constructor

@@ -235,7 +235,7 @@ public class ProfScreen extends Activity {
     		public void onClick(View v) { 
     			//Toast.makeText(getApplicationContext(), "back!", Toast.LENGTH_SHORT).show();
     			Intent i = new Intent();
-    			i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.LawsonNavigatorvActivity");
+    			i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.LawsonNavigatorActivity");
     			startActivity(i);
     		}
     	});

@@ -181,9 +181,9 @@ public class RoomNumber extends Activity {
 
 			try {
 			    kkSocket = new Socket(InetAddress.getByAddress(IP), 4444);
-			    out = new PrintWriter(kkSocket.getOutputStream(), true);
-			    in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
-				ois = new ObjectInputStream(kkSocket.getInputStream());
+			    //out = new PrintWriter(kkSocket.getOutputStream(), true);
+			    //in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
+				//ois = new ObjectInputStream(kkSocket.getInputStream());
 				oos = new ObjectOutputStream(kkSocket.getOutputStream());
 			} catch (UnknownHostException e) {
 			    System.err.println("Cannot find the host.");
@@ -203,12 +203,12 @@ public class RoomNumber extends Activity {
 
     			//Toast.makeText(getApplicationContext(), in.readLine(), Toast.LENGTH_SHORT).show();
     			
-    			try {
-				out.close();
-				in.close();
-				oos.close();
-				ois.close();
-				kkSocket.close();
+			/*try {
+				//out.close();
+				//in.close();
+				//oos.close();
+				//ois.close();
+				//kkSocket.close();
 			}catch (IOException e) {
 				e.printStackTrace();
 				System.exit(1);
@@ -224,7 +224,7 @@ public class RoomNumber extends Activity {
     		public void onClick(View v) { 
     			//Toast.makeText(getApplicationContext(), "back!", Toast.LENGTH_SHORT).show();
     			Intent i = new Intent();
-    			i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.LawsonNavigatorvActivity");
+    			i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.LawsonNavigatorActivity");
     			startActivity(i);
     		}
     	});
