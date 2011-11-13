@@ -11,7 +11,12 @@
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,14 +31,33 @@ public class FloorPlanScreen extends Activity {
 	private String finalFloor;
 	private static UserInput getRoomMap = new UserInput();
 	private LawsonNavigatorActivity saved = new LawsonNavigatorActivity();
+	private Activity parent;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		//starts screen and builds everything
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.floorplans);
+		parent = (Activity) this.getParent();
 		setUpChoices();
 		setUpButtons();
 	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.layout.exit, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.exit:
+            	System.exit(0);
+                break;
+        }
+        return true;
+    }
 	
 	public void setUpChoices()
 	{
@@ -121,10 +145,23 @@ public class FloorPlanScreen extends Activity {
 		backButton.setOnClickListener(new Button.OnClickListener() { 
     		public void onClick(View v) { 
     			//Toast.makeText(getApplicationContext(), "back!", Toast.LENGTH_SHORT).show();
-    			Intent i = new Intent();
-    			i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.LawsonNavigatorActivity");
-    			startActivity(i);
+    			finish();
     		}
     	});
+	}
+	
+	protected void onStop()
+	{
+		super.onStop();
+		
+		try {
+			parent.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
+			parent.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK));
+		} catch (Exception e) { System.out.println("Well, I shouldn't do this, but it works!"); }
+		
+		
+		/*Intent i = new Intent();
+		i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.LawsonNavigatorActivity");
+		startActivity(i);*/
 	}
 }

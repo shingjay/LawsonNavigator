@@ -20,21 +20,44 @@ import java.net.*;
 
 public class RoomNumber extends Activity {
 	private Button goButton, backButton;
-	private RadioButton stairs, elevator, base, first, second, third;
+	private RadioButton stairs, elevator, base, first, second, third, textSpeech, map;
 	private Spinner spinner;
+	private getLocation location;
 	private UserInput getRoomMap = new UserInput();
 	private LawsonNavigatorActivity saved = new LawsonNavigatorActivity();
 	private String finalRoom;
 	private Floor floor = Floor.BASEMENT;
 	private Transport transport = Transport.ELEVATOR;
+	private Display displayOption = Display.TEXTSPEECH;
+	private Activity parent;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.roomnumber);
+		parent = (Activity) this.getParent();
 		setUpChoices();
 		setUpRadio();
 		setUpButtons();
+        //location = new getLocation(this.getApplicationContext(), getRoomMap);
+        //Toast.makeText(getApplicationContext(), getRoomMap.getRoomNumber() + ":" + getRoomMap.getTransport() + ":" + getRoomMap.getFloor() + ":" + getRoomMap.getLatitude() + ":" + getRoomMap.getLongitude(), Toast.LENGTH_SHORT).show();
 	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.layout.exit, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.exit:
+            	System.exit(0);
+                break;
+        }
+        return true;
+    }
 	
 	public void setUpChoices()
 	{
@@ -58,6 +81,9 @@ public class RoomNumber extends Activity {
 		first = (RadioButton)findViewById(R.id.firstFloor);
 		second = (RadioButton)findViewById(R.id.secondFloor);
 		third = (RadioButton)findViewById(R.id.thirdFloor);
+		textSpeech = (RadioButton)findViewById(R.id.useTextSpeech);
+		textSpeech.setChecked(true);
+		map = (RadioButton)findViewById(R.id.useMap);
 		
 		stairs.setOnCheckedChangeListener(new OnCheckedChangeListener() 
 		{
@@ -144,6 +170,32 @@ public class RoomNumber extends Activity {
 				}
 			}
 		});
+		
+		textSpeech.setOnCheckedChangeListener(new OnCheckedChangeListener() 
+		{
+			//@Override
+			public void onCheckedChanged(CompoundButton arg0, boolean arg1) 
+			{
+				if (arg1)
+				{
+					map.setChecked(false);
+					displayOption = Display.TEXTSPEECH;
+				}
+			}
+		});
+		
+		map.setOnCheckedChangeListener(new OnCheckedChangeListener() 
+		{
+			//@Override
+			public void onCheckedChanged(CompoundButton arg0, boolean arg1) 
+			{
+				if (arg1)
+				{
+					textSpeech.setChecked(false);
+					displayOption = Display.MAP;
+				}
+			}
+		});
 	}
 	
 	public void setUpButtons()
@@ -164,6 +216,8 @@ public class RoomNumber extends Activity {
     			saved.setFloor(floor);
     			getRoomMap.setRoomNumber(finalRoom);
     			saved.setName("Room", finalRoom);
+    			//getRoomMap.setDisplayOption(displayOption);
+    			//saved.setDisplay(displayOption);
     			
     			//Sending stuff to server
     			Socket kkSocket = null;
@@ -223,11 +277,24 @@ public class RoomNumber extends Activity {
     		//@Override 
     		public void onClick(View v) { 
     			//Toast.makeText(getApplicationContext(), "back!", Toast.LENGTH_SHORT).show();
-    			Intent i = new Intent();
-    			i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.LawsonNavigatorActivity");
-    			startActivity(i);
+    			finish();
     		}
     	});
+	}
+	
+	protected void onStop()
+	{
+		super.onStop();
+		
+		try {
+			parent.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
+			parent.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK));
+		} catch (Exception e) { System.out.println("Well, I shouldn't do this, but it works!"); }
+		
+		
+		/*Intent i = new Intent();
+		i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.LawsonNavigatorActivity");
+		startActivity(i);*/
 	}
 	
 	public UserInput returnInfo()

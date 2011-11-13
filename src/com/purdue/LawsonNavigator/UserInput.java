@@ -19,6 +19,7 @@ public class UserInput implements Serializable {
 	
 	private Transport transport;
 	private Floor floor;
+	private Display displayOption;
 	private double latitude;
 	private double longitude;
 	private String roomNumber;
@@ -31,6 +32,7 @@ public class UserInput implements Serializable {
 	public UserInput() {
 		transport = null;
 		floor = null;
+		displayOption = null;
 		latitude = 0; 
 		longitude = 0;
 		roomNumber = null;
@@ -38,9 +40,10 @@ public class UserInput implements Serializable {
 		professorName = null;
 	}
 	
-	public UserInput(Transport transport, Floor floor, double latitude, double longitude, String roomNumber, String nonAcademicRoom, String professorName) {
+	public UserInput(Transport transport, Floor floor, Display displayOption, double latitude, double longitude, String roomNumber, String nonAcademicRoom, String professorName) {
 		this.transport = transport;
 		this.floor = floor;
+		this.displayOption = displayOption;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.roomNumber = roomNumber;
@@ -62,6 +65,8 @@ public class UserInput implements Serializable {
 	public String getNonAcademicRoom() {return nonAcademicRoom;}
 	
 	public String getProfessorName() {return professorName;}
+	
+	public Display getDisplayOption() {return displayOption;}
 	//Added by Ryan End
 	
 	
@@ -71,6 +76,10 @@ public class UserInput implements Serializable {
 	
 	public void setFloor(Floor floor) {
 		this.floor = floor;
+	}
+	
+	public void setDisplayOption(Display displayOption) {
+		this.displayOption = displayOption;
 	}
 	
 	public void setLongitude(double longitude) {

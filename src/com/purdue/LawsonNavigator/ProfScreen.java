@@ -22,21 +22,44 @@ import java.net.*;
 public class ProfScreen extends Activity {
 	
 	private Button goButton, backButton;
-	private RadioButton stairs, elevator, base, first, second, third;
+	private RadioButton stairs, elevator, base, first, second, third, textSpeech, map;
 	private Spinner spinner;
+	private getLocation location;
 	private UserInput getProfMap = new UserInput();
 	private LawsonNavigatorActivity saved = new LawsonNavigatorActivity();
 	private String finalName;
 	private Floor floor = Floor.BASEMENT;
 	private Transport transport = Transport.ELEVATOR;
+	private Display displayOption = Display.TEXTSPEECH;
+	private Activity parent;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.professorname);
+		parent = (Activity) this.getParent();
 		setUpChoices();
 		setUpRadio();
 		setUpButtons();
+        //location = new getLocation(this.getApplicationContext(), getProfMap);
+        //Toast.makeText(getApplicationContext(), getProfMap.getRoomNumber() + ":" + getProfMap.getTransport() + ":" + getProfMap.getFloor() + ":" + getProfMap.getLatitude() + ":" + getProfMap.getLongitude(), Toast.LENGTH_SHORT).show();
 	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.layout.exit, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.exit:
+            	System.exit(0);
+                break;
+        }
+        return true;
+    }
 	
 	public void setUpChoices()
 	{
@@ -67,6 +90,9 @@ public class ProfScreen extends Activity {
 		first = (RadioButton)findViewById(R.id.firstFloor);
 		second = (RadioButton)findViewById(R.id.secondFloor);
 		third = (RadioButton)findViewById(R.id.thirdFloor);
+		textSpeech = (RadioButton)findViewById(R.id.useTextSpeech);
+		textSpeech.setChecked(true);
+		map = (RadioButton)findViewById(R.id.useMap);
 		
 		stairs.setOnCheckedChangeListener(new OnCheckedChangeListener() 
 		{
@@ -153,6 +179,32 @@ public class ProfScreen extends Activity {
 				}
 			}
 		});
+		
+		textSpeech.setOnCheckedChangeListener(new OnCheckedChangeListener() 
+		{
+			//@Override
+			public void onCheckedChanged(CompoundButton arg0, boolean arg1) 
+			{
+				if (arg1)
+				{
+					map.setChecked(false);
+					displayOption = Display.TEXTSPEECH;
+				}
+			}
+		});
+		
+		map.setOnCheckedChangeListener(new OnCheckedChangeListener() 
+		{
+			//@Override
+			public void onCheckedChanged(CompoundButton arg0, boolean arg1) 
+			{
+				if (arg1)
+				{
+					textSpeech.setChecked(false);
+					displayOption = Display.MAP;
+				}
+			}
+		});
 	}
 	
 	public void setUpButtons()
@@ -170,8 +222,10 @@ public class ProfScreen extends Activity {
     			saved.setUsage(transport);
     			getProfMap.setFloor(floor);
     			saved.setFloor(floor);
-    			getProfMap.setRoomNumber(finalName);
+    			getProfMap.setProfessorName(finalName);
     			saved.setName("prof", finalName);
+    			getProfMap.setDisplayOption(displayOption);
+    			saved.setDisplay(displayOption);
     			
     			//Sending stuff to server
     			Socket kkSocket = null;
@@ -223,7 +277,7 @@ public class ProfScreen extends Activity {
 			}
     			
     			
-    			Toast.makeText(getApplicationContext(), getProfMap.getRoomNumber() + ":" + getProfMap.getFloor() + ":" + getProfMap.getTransport(), Toast.LENGTH_SHORT).show();
+    			//Toast.makeText(getApplicationContext(), getProfMap.getRoomNumber() + ":" + getProfMap.getFloor() + ":" + getProfMap.getTransport(), Toast.LENGTH_SHORT).show();
     			/*Intent i = new Intent();
 				i.setClassName("com.LawsonNavigator.org", "com.LawsonNavigator.org.LawsonNavigatorActivity");
 				startActivity(i);*/
@@ -234,11 +288,24 @@ public class ProfScreen extends Activity {
     		//@Override 
     		public void onClick(View v) { 
     			//Toast.makeText(getApplicationContext(), "back!", Toast.LENGTH_SHORT).show();
-    			Intent i = new Intent();
-    			i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.LawsonNavigatorActivity");
-    			startActivity(i);
+    			finish();
     		}
     	});
+	}
+	
+	protected void onStop()
+	{
+		super.onStop();
+		
+		try {
+			parent.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
+			parent.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK));
+		} catch (Exception e) { System.out.println("Well, I shouldn't do this, but it works!"); }
+		
+		
+		/*Intent i = new Intent();
+		i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.LawsonNavigatorActivity");
+		startActivity(i);*/
 	}
 	
 	public UserInput returnInfo()

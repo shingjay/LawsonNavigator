@@ -47,6 +47,7 @@ public class Voice_Recognition extends Activity{
 	  String myText1 = null;
 	  Floor floor = null;
 	  Transport transport = null;
+	  Display display = null;
 	  String roomNumber = null;
 	  String nonAcademicRoom = null;
 	  String professorName = null;
@@ -321,7 +322,7 @@ public class Voice_Recognition extends Activity{
 	    			}
 	    		}
 	    		
-	    		UserInput ui = new UserInput(transport, floor, 0, 0, roomNumber, nonAcademicRoom, professorName);
+	    		UserInput ui = new UserInput(transport, floor, display, 0, 0, roomNumber, nonAcademicRoom, professorName);
 	    		check1 = false;
 	    		check2 = false;
 	    		check3 = false;
