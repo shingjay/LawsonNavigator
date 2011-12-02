@@ -9,14 +9,29 @@
 
 package com.purdue.LawsonNavigator;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.*;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.view.*;
-import android.content.*;
-import java.io.*;
-import java.net.*;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 
 public class RoomNumber extends Activity {
 	private Button goButton, backButton;
@@ -266,10 +281,12 @@ public class RoomNumber extends Activity {
 			}catch (IOException e) {
 				e.printStackTrace();
 				System.exit(1);
-			}
-    			/*Intent i = new Intent();
-				i.setClassName("com.LawsonNavigator.org", "com.LawsonNavigator.org.LawsonNavigatorActivity");
-				startActivity(i);*/
+			}*/
+			
+			finish();
+			Intent i = new Intent();
+			i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.MapScreen");
+			startActivity(i);
     		}
     	});
 		

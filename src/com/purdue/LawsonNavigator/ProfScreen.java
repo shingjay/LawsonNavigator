@@ -10,14 +10,35 @@
 
 package com.purdue.LawsonNavigator;
 
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+
 import android.app.Activity;
+import android.content.ContextWrapper;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.*;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.view.*;
-import android.content.*;
-import java.io.*;
-import java.net.*;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 
 public class ProfScreen extends Activity {
 	
@@ -32,11 +53,15 @@ public class ProfScreen extends Activity {
 	private Transport transport = Transport.ELEVATOR;
 	private Display displayOption = Display.TEXTSPEECH;
 	private Activity parent;
+	private SharedPreferences settings;
+	private String directions1, directions2;
+	private Point point1, point2;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.professorname);
 		parent = (Activity) this.getParent();
+		settings = getSharedPreferences("Options", 0);
 		setUpChoices();
 		setUpRadio();
 		setUpButtons();
@@ -214,7 +239,8 @@ public class ProfScreen extends Activity {
 		
 		goButton.setOnClickListener(new Button.OnClickListener() { 
     		//@Override 
-    		public void onClick(View v) 
+    		@SuppressWarnings("unchecked")
+			public void onClick(View v) 
     		{
     			finalName = spinner.getSelectedItem().toString();
     			
@@ -226,61 +252,113 @@ public class ProfScreen extends Activity {
     			saved.setName("prof", finalName);
     			getProfMap.setDisplayOption(displayOption);
     			saved.setDisplay(displayOption);
-    			
+    			getProfMap.setLatitude(getLocation.lat);
+    			getProfMap.setLongitude(getLocation.longi);
+    	        
     			//Sending stuff to server
     			Socket kkSocket = null;
-			PrintWriter out = null;
-			BufferedReader in = null;
-			ObjectInputStream ois = null;
-			ObjectOutputStream oos = null;
+				PrintWriter out = null;
+				BufferedReader in = null;
+				ObjectInputStream ois = null;
+				ObjectOutputStream oos = null;
+				InputStream is = null;
+				FileOutputStream fos = null;
+		
+				//The IP address of moore01	
+				byte[] IP = new byte[4];
+				IP[0] = (byte) 128;
+				IP[1] = (byte) 10;
+				IP[2] = (byte) 12;
+				IP[3] = (byte) 131;
 	
-			//The IP address of moore01	
-			byte[] IP = new byte[4];
-			IP[0] = (byte) 128;
-			IP[1] = (byte) 10;
-			IP[2] = (byte) 12;
-			IP[3] = (byte) 131;
+				try {
+				    kkSocket = new Socket(InetAddress.getByAddress(IP), 9999);
+				    out = new PrintWriter(kkSocket.getOutputStream(), true);
+				    in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
+					ois = new ObjectInputStream(kkSocket.getInputStream());
+					oos = new ObjectOutputStream(kkSocket.getOutputStream());
+					is = kkSocket.getInputStream();
+				} catch (UnknownHostException e) {
+				    System.err.println("Cannot find the host.");
+				    System.exit(1);
+				} catch (IOException e) {
+				    System.err.println("Couldn't get I/O for the connection to the host.");
+				    System.exit(1);
+				}
+				
+				try{
+					oos.writeObject(getProfMap);
+				}catch(Exception e){
+					System.out.println("oos error");
+					e.printStackTrace();
+					System.exit(1);
+				}
+	
+				//get input from server
+				ArrayList<Byte> images1 = new ArrayList<Byte>();
+				ArrayList<String> textDirections1 = new ArrayList<String>();
+				ArrayList<Point> points1 = new ArrayList<Point>();
+				ArrayList<Byte> images2 = new ArrayList<Byte>();
+				ArrayList<String> textDirections2 = new ArrayList<String>();
+				ArrayList<Point> points2 = new ArrayList<Point>();
+				
+    			ContextWrapper cw = new ContextWrapper(getApplicationContext());
 
-			try {
-			    kkSocket = new Socket(InetAddress.getByAddress(IP), 4444);
-			    out = new PrintWriter(kkSocket.getOutputStream(), true);
-			    in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
-				ois = new ObjectInputStream(kkSocket.getInputStream());
-				oos = new ObjectOutputStream(kkSocket.getOutputStream());
-			} catch (UnknownHostException e) {
-			    System.err.println("Cannot find the host.");
-			    System.exit(1);
-			} catch (IOException e) {
-			    System.err.println("Couldn't get I/O for the connection to the host.");
-			    System.exit(1);
-			}
-			
-			try{
-				oos.writeObject(getProfMap);
-			}catch(Exception e){
-				System.out.println("oos error");
-				e.printStackTrace();
-				System.exit(1);
-			}
-
-    			//Toast.makeText(getApplicationContext(), in.readLine(), Toast.LENGTH_SHORT).show();
+				try
+				{
+					//read in first image, if there
+					System.out.println("about to read images1");
+					images1 = (ArrayList<Byte>)ois.readObject();
+					ImageZoomActivity.mapArray1 = new byte[images1.size()];
+					
+					for (int i = 0; i < images1.size(); i++)
+					{
+						ImageZoomActivity.mapArray1[i] = images1.get(i).byteValue();
+					}
+					
+					//read in first directions, if there
+					textDirections1 = (ArrayList<String>)ois.readObject();
+					directions1 = textDirections1.toString();
+					//System.out.println(directions1);
+					
+					//read in first point, if there
+					points1 = (ArrayList<Point>)ois.readObject();
+					
+					//read in second image, if there
+					images2 = (ArrayList<Byte>)ois.readObject();
+					ImageZoomActivity.mapArray2 = new byte[images2.size()];
+					
+					for (int i = 0; i < images2.size(); i++)
+					{
+						ImageZoomActivity.mapArray2[i] = images2.get(i).byteValue();
+					}
+					
+					//read in second directions, if there
+					textDirections2 = (ArrayList<String>)ois.readObject();
+					directions2 = textDirections2.toString();
+					
+					//read in second points, if there
+					points2 = (ArrayList<Point>)ois.readObject();
+					
+					
+				}catch(Exception e){
+					System.err.println("Error in recieving data from the server");
+					e.printStackTrace();
+					System.exit(1);
+				}
+	    		
+    			finish();
     			
-    			try {
-				out.close();
-				in.close();
-				oos.close();
-				ois.close();
-				kkSocket.close();
-			}catch (IOException e) {
-				e.printStackTrace();
-				System.exit(1);
-			}
-    			
-    			
-    			//Toast.makeText(getApplicationContext(), getProfMap.getRoomNumber() + ":" + getProfMap.getFloor() + ":" + getProfMap.getTransport(), Toast.LENGTH_SHORT).show();
-    			/*Intent i = new Intent();
-				i.setClassName("com.LawsonNavigator.org", "com.LawsonNavigator.org.LawsonNavigatorActivity");
-				startActivity(i);*/
+    			Intent i = new Intent();
+    			if (displayOption == Display.MAP)
+    				i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.MapScreen");
+    			else if (displayOption == Display.TEXTSPEECH)
+    			{
+    				TextView.directions += directions1;
+    				TextView.directions2 += directions2;
+    				i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.TextView");
+    			}
+				startActivity(i);
     		}
     	});
 		

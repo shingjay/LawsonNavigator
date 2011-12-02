@@ -11,19 +11,19 @@
 package com.purdue.LawsonNavigator;
 
 import android.app.Activity;
-import android.content.*;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Toast;
 
 public class Options extends Activity {
 	private Button goButton, backButton;
-	private LawsonNavigatorActivity optionChange = new LawsonNavigatorActivity();
 	private CheckBox voiceChoice;
 	private SharedPreferences settings;
 	private boolean voice;
@@ -79,18 +79,12 @@ public class Options extends Activity {
     		//@Override 
     		public void onClick(View v) { 
     			Toast.makeText(getApplicationContext(), "SAVE! ", Toast.LENGTH_SHORT).show();
-    			
-    			/*Intent i = new Intent();
-				i.setClassName("com.LawsonNavigator.org", "com.LawsonNavigator.org.LawsonNavigatorActivity");
-				startActivity(i);*/
-
     		}
     	});
 		
 		backButton.setOnClickListener(new Button.OnClickListener() { 
     		//@Override 
     		public void onClick(View v) { 
-    			//Toast.makeText(getApplicationContext(), "back!", Toast.LENGTH_SHORT).show();
     			finish();
     		}
     	});
@@ -107,8 +101,6 @@ public class Options extends Activity {
 		
 		//commit
 		editor.commit();
-		String justChecking = new Boolean(settings.getBoolean("voiceOn", true)).toString();
-		System.out.println(justChecking + " Leaving Options");
 		
 		if (!voice)
 		{

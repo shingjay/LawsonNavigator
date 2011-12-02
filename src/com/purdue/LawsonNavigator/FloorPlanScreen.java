@@ -11,35 +11,31 @@
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
-import java.io.*;
-import java.net.*;
 
 public class FloorPlanScreen extends Activity {
-	private Button goButton, backButton;
 	private Spinner spinner;
-	private String finalFloor;
-	private static UserInput getRoomMap = new UserInput();
-	private LawsonNavigatorActivity saved = new LawsonNavigatorActivity();
 	private Activity parent;
+	private ImageView changeImage;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		//starts screen and builds everything
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.floorplans);
 		parent = (Activity) this.getParent();
+		changeImage = (ImageView)findViewById(R.id.floorPlanImage);
 		setUpChoices();
-		setUpButtons();
+		//setUpButtons();
 	}
 	
 	@Override
@@ -67,89 +63,73 @@ public class FloorPlanScreen extends Activity {
 				new String[] { "Basement", "Floor One", "Floor Two", "Floor Three" });
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
-	}
-	
-	public void setUpButtons()
-	{
-		//buttons set to actually listen for a press
-		goButton = (Button)findViewById(R.id.goFloorPlan);
-		backButton = (Button)findViewById(R.id.back);
 		
-		goButton.setOnClickListener(new Button.OnClickListener() { 
-    		public void onClick(View v) 
-    		{ 
-    			finalFloor = spinner.getSelectedItem().toString();
-    			
-    			getRoomMap.setRoomNumber(finalFloor);
-    			saved.setName("Floor", finalFloor);
-    			saved.setFloor(Floor.BASEMENT);
-    			saved.setUsage(Transport.ELEVATOR);
-    			
-    			//Sending stuff to server
-    			Socket kkSocket = null;
-			PrintWriter out = null;
-			BufferedReader in = null;
-			ObjectInputStream ois = null;
-			ObjectOutputStream oos = null;
-	
-			//The IP address of moore01	
-			byte[] IP = new byte[4];
-			IP[0] = (byte) 128;
-			IP[1] = (byte) 10;
-			IP[2] = (byte) 12;
-			IP[3] = (byte) 131;
+		spinner.setOnFocusChangeListener(new Spinner.OnFocusChangeListener() {
 
-			try {
-			    kkSocket = new Socket(InetAddress.getByAddress(IP), 4444);
-			    out = new PrintWriter(kkSocket.getOutputStream(), true);
-			    in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
-				ois = new ObjectInputStream(kkSocket.getInputStream());
-				oos = new ObjectOutputStream(kkSocket.getOutputStream());
-			} catch (UnknownHostException e) {
-			    System.err.println("Cannot find the host.");
-			    System.exit(1);
-			} catch (IOException e) {
-			    System.err.println("Couldn't get I/O for the connection to the host.");
-			    System.exit(1);
+			@Override
+			public void onFocusChange(View arg0, boolean arg1) {
+				// TODO Auto-generated method stub
+				
 			}
 			
-			try{
-				oos.writeObject(getRoomMap);
-			}catch(Exception e){
-				System.out.println("oos error");
-				e.printStackTrace();
-				System.exit(1);
+		});
+		
+		spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() 
+		{
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) 
+			{
+				Intent i = new Intent();
+				
+				try {
+					String choice = spinner.getSelectedItem().toString();
+					System.out.println(choice);
+					
+					if (choice == "Basement")
+					{
+						changeImage.setImageResource(R.drawable.floorb);
+						ImageZoomActivity.image = 0;
+						Toast.makeText(getApplicationContext(), "Press the soft 'Back' key to go back", Toast.LENGTH_SHORT).show();
+						i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.ImageZoomActivity");
+						startActivity(i);
+					}
+					else if (choice == "Floor One")
+					{
+						changeImage.setImageResource(R.drawable.floor1);
+						ImageZoomActivity.image = 1;
+						Toast.makeText(getApplicationContext(), "Press the soft 'Back' key to go back", Toast.LENGTH_SHORT).show();
+						i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.ImageZoomActivity");
+						startActivity(i);
+					}
+					else if (choice == "Floor Two")
+					{
+						changeImage.setImageResource(R.drawable.floor2);
+						ImageZoomActivity.image = 2;
+						Toast.makeText(getApplicationContext(), "Press the soft 'Back' key to go back", Toast.LENGTH_SHORT).show();
+						i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.ImageZoomActivity");
+						startActivity(i);
+					}
+					else if (choice == "Floor Three")
+					{
+						changeImage.setImageResource(R.drawable.floor3);
+						ImageZoomActivity.image = 3;
+						Toast.makeText(getApplicationContext(), "Press the soft 'Back' key to go back", Toast.LENGTH_SHORT).show();
+						i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.ImageZoomActivity");
+						startActivity(i);
+					}
+				} catch (Exception e) { finish(); }
 			}
 
-    			//Toast.makeText(getApplicationContext(), in.readLine(), Toast.LENGTH_SHORT).show();
-    			
-    			try {
-				out.close();
-				in.close();
-				oos.close();
-				ois.close();
-				kkSocket.close();
-			}catch (IOException e) {
-				e.printStackTrace();
-				System.exit(1);
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
 			}
-    			
-    			
-    			Toast.makeText(getApplicationContext(), finalFloor + " MAP!", Toast.LENGTH_SHORT).show();
-    			/*Intent i = new Intent();
-				i.setClassName("com.LawsonNavigator.org", "com.LawsonNavigator.org.LawsonNavigatorActivity");
-				startActivity(i);*/
-    		}
-    	});
-		
-		backButton.setOnClickListener(new Button.OnClickListener() { 
-    		public void onClick(View v) { 
-    			//Toast.makeText(getApplicationContext(), "back!", Toast.LENGTH_SHORT).show();
-    			finish();
-    		}
-    	});
+			
+		});
 	}
-	
+
 	protected void onStop()
 	{
 		super.onStop();

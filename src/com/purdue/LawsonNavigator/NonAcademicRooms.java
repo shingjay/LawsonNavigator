@@ -9,14 +9,30 @@
 
 package com.purdue.LawsonNavigator;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.*;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.view.*;
-import android.content.*;
-import java.io.*;
-import java.net.*;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 
 public class NonAcademicRooms extends Activity {
 	private Button goButton, backButton;
@@ -220,58 +236,57 @@ public class NonAcademicRooms extends Activity {
     			
     			//Sending stuff to server
     			Socket kkSocket = null;
-			PrintWriter out = null;
-			BufferedReader in = null;
-			ObjectInputStream ois = null;
-			ObjectOutputStream oos = null;
+				PrintWriter out = null;
+				BufferedReader in = null;
+				ObjectInputStream ois = null;
+				ObjectOutputStream oos = null;
+		
+				//The IP address of moore01	
+				byte[] IP = new byte[4];
+				IP[0] = (byte) 128;
+				IP[1] = (byte) 10;
+				IP[2] = (byte) 12;
+				IP[3] = (byte) 131;
 	
-			//The IP address of moore01	
-			byte[] IP = new byte[4];
-			IP[0] = (byte) 128;
-			IP[1] = (byte) 10;
-			IP[2] = (byte) 12;
-			IP[3] = (byte) 131;
-
-			try {
-			    kkSocket = new Socket(InetAddress.getByAddress(IP), 4444);
-			    out = new PrintWriter(kkSocket.getOutputStream(), true);
-			    in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
-				ois = new ObjectInputStream(kkSocket.getInputStream());
-				oos = new ObjectOutputStream(kkSocket.getOutputStream());
-			} catch (UnknownHostException e) {
-			    System.err.println("Cannot find the host.");
-			    System.exit(1);
-			} catch (IOException e) {
-			    System.err.println("Couldn't get I/O for the connection to the host.");
-			    System.exit(1);
-			}
-			
-			try{
-				oos.writeObject(getNonRoomMap);
-			}catch(Exception e){
-				System.out.println("oos error");
-				e.printStackTrace();
-				System.exit(1);
-			}
-
-    			//Toast.makeText(getApplicationContext(), in.readLine(), Toast.LENGTH_SHORT).show();
+				try {
+				    kkSocket = new Socket(InetAddress.getByAddress(IP), 4444);
+				    out = new PrintWriter(kkSocket.getOutputStream(), true);
+				    in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
+					ois = new ObjectInputStream(kkSocket.getInputStream());
+					oos = new ObjectOutputStream(kkSocket.getOutputStream());
+				} catch (UnknownHostException e) {
+				    System.err.println("Cannot find the host.");
+				    System.exit(1);
+				} catch (IOException e) {
+				    System.err.println("Couldn't get I/O for the connection to the host.");
+				    System.exit(1);
+				}
+				
+				try{
+					oos.writeObject(getNonRoomMap);
+				}catch(Exception e){
+					System.out.println("oos error");
+					e.printStackTrace();
+					System.exit(1);
+				}
+	
+	    			//Toast.makeText(getApplicationContext(), in.readLine(), Toast.LENGTH_SHORT).show();
+	    			
+	    			try {
+					out.close();
+					in.close();
+					oos.close();
+					ois.close();
+					kkSocket.close();
+				}catch (IOException e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
     			
-    			try {
-				out.close();
-				in.close();
-				oos.close();
-				ois.close();
-				kkSocket.close();
-			}catch (IOException e) {
-				e.printStackTrace();
-				System.exit(1);
-			}
-    			
-    			
-    			//Toast.makeText(getApplicationContext(), getNonRoomMap.getRoom() + ":" + getNonRoomMap.getFloor() + ":" + getNonRoomMap.getTransport(), Toast.LENGTH_SHORT).show();
-    			/*Intent i = new Intent();
-				i.setClassName("com.LawsonNavigator.org", "com.LawsonNavigator.org.LawsonNavigatorActivity");
-				startActivity(i);*/
+    			finish();
+    			Intent i = new Intent();
+				i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.MapScreen");
+				startActivity(i);
     		}
     	});
 		

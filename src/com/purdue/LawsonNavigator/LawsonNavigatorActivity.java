@@ -1,7 +1,9 @@
 package com.purdue.LawsonNavigator;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -14,21 +16,27 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.widget.*;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.Engine;
 import android.speech.tts.TextToSpeech.OnInitListener;
-import android.view.*;
-import android.content.*;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 public class LawsonNavigatorActivity extends Activity
 {
@@ -36,9 +44,10 @@ public class LawsonNavigatorActivity extends Activity
     public UserInput saved = new UserInput();
     private LocationManager locMan = null;
 	private LocationListener locListen = null;
-	private getLocation location = null;
+	private getLocation location;
+	Location loc = null;
 	private Context context;
-	private String provider, myText1 = null, roomNumber = null, nonAcademicRoom = null, professorName = null;
+	private String provider, myText1 = null, roomNumber = null, nonAcademicRoom = null, professorName = null, directions1 = "", directions2 = "";
 	private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
 	private static int TTS_DATA_CHECK = 1;
 	private static String[] roomNumbers = { "B105", "B107", "B116 (TA)", "B129", "B131", "B132", "B134", "B146", "B148", "B151",
@@ -61,7 +70,6 @@ public class LawsonNavigatorActivity extends Activity
 	Transport transport = null;
 	Display displayOption = null;
 	private boolean check1=false, check2=false, check3=false, voiceOnOff;
-	private ListView wordsList;
 	public SharedPreferences settings;
     
     public LawsonNavigatorActivity()
@@ -75,19 +83,16 @@ public class LawsonNavigatorActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 		PackageManager pm = getPackageManager();
-        //vr = new Voice_Recognition(pm);
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 		settings = getSharedPreferences("Options", 0);
 		voiceOnOff = settings.getBoolean("voiceOn", true);
 		context = this.getApplicationContext();
 		location = new getLocation(context, saved);
-        List<ResolveInfo> activities = pm.queryIntentActivities(
-                new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+        List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
         initTextToSpeech();
         setUpButton();
         getLocation();
-        System.out.println("Location changed : Lat: " + saved.getLatitude()
-				+ " Lng: " + saved.getLongitude());
+        System.out.println("Location changed : Lat: " + saved.getLatitude() + " Lng: " + saved.getLongitude());
     }
     
     @Override
@@ -120,7 +125,6 @@ public class LawsonNavigatorActivity extends Activity
     	roomButton.setOnClickListener(new Button.OnClickListener() { 
     		//@Override 
     		public void onClick(View v) { 
-    			//Toast.makeText(getApplicationContext(), saved.getRoom() + ":" + saved.getTransport() + ":" + saved.getFloor() + ":" + saved.getLatitude() + ":" + saved.getLongitude(), Toast.LENGTH_SHORT).show();
     			//finish();	
     			Intent i = new Intent();
     			i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.RoomNumber");
@@ -131,7 +135,6 @@ public class LawsonNavigatorActivity extends Activity
     	profButton.setOnClickListener(new Button.OnClickListener() { 
     		//@Override 
     		public void onClick(View v) { 
-    			//Toast.makeText(getApplicationContext(), saved.getRoom() + ":" + saved.getTransport() + ":" + saved.getFloor() + ":" + saved.getLatitude() + ":" + saved.getLongitude(), Toast.LENGTH_SHORT).show();
     			//finish();	
     			Intent i = new Intent();
     			i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.ProfScreen");
@@ -142,7 +145,6 @@ public class LawsonNavigatorActivity extends Activity
     	nonAcaButton.setOnClickListener(new Button.OnClickListener() { 
     		//@Override 
     		public void onClick(View v) { 
-    			//Toast.makeText(getApplicationContext(), saved.getRoom() + ":" + saved.getTransport() + ":" + saved.getFloor() + ":" + saved.getLatitude() + ":" + saved.getLongitude(), Toast.LENGTH_SHORT).show();
     			//finish();	
     			Intent i = new Intent();
     			i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.NonAcademicRooms");
@@ -153,7 +155,6 @@ public class LawsonNavigatorActivity extends Activity
     	floorButton.setOnClickListener(new Button.OnClickListener() { 
     		//@Override 
     		public void onClick(View v) { 
-    			//Toast.makeText(getApplicationContext(), saved.getRoom() + ":" + saved.getTransport() + ":" + saved.getFloor() + ":" + saved.getLatitude() + ":" + saved.getLongitude(), Toast.LENGTH_SHORT).show();
     			//finish();	
     			Intent i = new Intent();
     			i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.FloorPlanScreen");
@@ -164,7 +165,6 @@ public class LawsonNavigatorActivity extends Activity
     	optionButton.setOnClickListener(new Button.OnClickListener() { 
     		//@Override 
     		public void onClick(View v) { 
-    			//Toast.makeText(getApplicationContext(), saved.getRoom() + ":" + saved.getTransport() + ":" + saved.getFloor() + ":" + saved.getLatitude() + ":" + saved.getLongitude(), Toast.LENGTH_SHORT).show();
     			//finish();	
     			Intent i = new Intent();
     			i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.Options");
@@ -203,19 +203,15 @@ public class LawsonNavigatorActivity extends Activity
 	{
 		switch (floor) {
 		case BASEMENT:
-			//finalFloor = "Basement";
 			saved.setFloor(floor);
 			break;
 		case FIRST:
-			//finalFloor = "First Floor";
 			saved.setFloor(floor);
 			break;
 		case SECOND:
-			//finalFloor = "Second Floor";
 			saved.setFloor(floor);
 			break;
 		case THIRD:
-			//finalFloor = "Third Floor";
 			saved.setFloor(floor);
 			break;
 			
@@ -226,11 +222,9 @@ public class LawsonNavigatorActivity extends Activity
 	{
 		switch (transport) {
 		case ELEVATOR:
-			//finalUsage = "Elevator";
 			saved.setTransport(transport);
 			break;
 		case STAIRS:
-			//finalUsage = "Stairs";
 			saved.setTransport(transport);
 			break;
 		}
@@ -274,13 +268,6 @@ public class LawsonNavigatorActivity extends Activity
 		locListen = new MyLocationListener();
 		
 		locMan.requestLocationUpdates(provider, 0, 0, locListen);
-		Toast.makeText(
-				context,
-				"Location changed : Lat: " + saved.getLatitude()
-						+ " Lng: " + saved.getLongitude(),
-				Toast.LENGTH_SHORT).show();
-		System.out.println("Location changed : Lat: " + saved.getLatitude()
-						+ " Lng: " + saved.getLongitude());
 		//updateLocation(location);
 	}
 
@@ -289,13 +276,6 @@ public class LawsonNavigatorActivity extends Activity
 			if (loc != null) {
 				saved.setLatitude(loc.getLatitude());
 				saved.setLongitude(loc.getLongitude());
-				Toast.makeText(
-						context,
-						"Location changed : Lat: " + saved.getLatitude()
-								+ " Lng: " + saved.getLongitude(),
-						Toast.LENGTH_SHORT).show();
-				System.out.println("Location changed : Lat: " + saved.getLatitude()
-						+ " Lng: " + saved.getLongitude());
 			}
 		}
 
@@ -322,121 +302,123 @@ public class LawsonNavigatorActivity extends Activity
 		}
 	  }
 	  
-	  private void startVoiceRecognitionActivity() {
-		  	
-			Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-			
-			// Specify the calling package to identify your application
-			intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getClass().getPackage().getName());
-			
-			// Display an hint to the user about what he should say.
-			if (prompt == 0){
-				try {
-					myText1 = "Are you looking for a room number, " +
-							  "a professor, or a non-academic room?";
-					myTextToSpeech.speak(myText1, TextToSpeech.QUEUE_FLUSH, null);
-					Thread.currentThread();
-					Thread.sleep(5000);
-					intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Are you looking for a room number, " +
-							  "a professor, or a non-academic room?");
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+	  private void startVoiceRecognitionActivity() 
+	  {
+		  	if (voiceOnOff) {
+				Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+				
+				// Specify the calling package to identify your application
+				intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getClass().getPackage().getName());
+				
+				// Display an hint to the user about what he should say.
+				if (prompt == 0){
+					try {
+						myText1 = "Are you looking for a room number, " +
+								  "a professor, or a non-academic room?";
+						myTextToSpeech.speak(myText1, TextToSpeech.QUEUE_FLUSH, null);
+						Thread.currentThread();
+						Thread.sleep(5000);
+						intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Are you looking for a room number, " +
+								  "a professor, or a non-academic room?");
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-			}
-			else if (prompt == 1){
-				try {
-					myText1 = "What is the room number you are looking for?";
-					myTextToSpeech.speak(myText1, TextToSpeech.QUEUE_FLUSH, null);
-					Thread.currentThread();
-					Thread.sleep(3000);
-					intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "What is the room number you are looking for?");
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				else if (prompt == 1){
+					try {
+						myText1 = "What is the room number you are looking for?";
+						myTextToSpeech.speak(myText1, TextToSpeech.QUEUE_FLUSH, null);
+						Thread.currentThread();
+						Thread.sleep(3000);
+						intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "What is the room number you are looking for?");
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	
 				}
-
-			}
-			else if (prompt == 2){
-				try {
-					myText1 = "Who is the professor you are looking for?";
-					myTextToSpeech.speak(myText1, TextToSpeech.QUEUE_FLUSH, null);
-					Thread.currentThread();
-					Thread.sleep(3000);
-					intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Who is the professor you are looking for?");
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				else if (prompt == 2){
+					try {
+						myText1 = "Who is the professor you are looking for?";
+						myTextToSpeech.speak(myText1, TextToSpeech.QUEUE_FLUSH, null);
+						Thread.currentThread();
+						Thread.sleep(3000);
+						intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Who is the professor you are looking for?");
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	
 				}
-
-			}
-			else if (prompt == 3){
-				try {
-					myText1 = "Which non-academic room are you looking for?";
-					myTextToSpeech.speak(myText1, TextToSpeech.QUEUE_FLUSH, null);
-					Thread.currentThread();
-					Thread.sleep(3000);
-					intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Which non-academic room are you looking for?");
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				else if (prompt == 3){
+					try {
+						myText1 = "Which non-academic room are you looking for?";
+						myTextToSpeech.speak(myText1, TextToSpeech.QUEUE_FLUSH, null);
+						Thread.currentThread();
+						Thread.sleep(3000);
+						intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Which non-academic room are you looking for?");
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	
 				}
-
-			}
-			else if (prompt == 4){
-				try {
-					myText1 = "What floor are you currently on?";
-					myTextToSpeech.speak(myText1, TextToSpeech.QUEUE_FLUSH, null);
-					Thread.currentThread();
-					Thread.sleep(3000);
-					intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "What floor are you currently on?");
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				else if (prompt == 4){
+					try {
+						myText1 = "What floor are you currently on?";
+						myTextToSpeech.speak(myText1, TextToSpeech.QUEUE_FLUSH, null);
+						Thread.currentThread();
+						Thread.sleep(3000);
+						intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "What floor are you currently on?");
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	
 				}
-
-			}
-			else if (prompt == 5){
-				try {
-					myText1 = "Would you like to use the stairs or elevator?";
-					myTextToSpeech.speak(myText1, TextToSpeech.QUEUE_FLUSH, null);
-					Thread.currentThread();
-					Thread.sleep(3000);
-					intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Would you like to use the stairs or elevator?");
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				else if (prompt == 5){
+					try {
+						myText1 = "Would you like to use the stairs or elevator?";
+						myTextToSpeech.speak(myText1, TextToSpeech.QUEUE_FLUSH, null);
+						Thread.currentThread();
+						Thread.sleep(3000);
+						intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Would you like to use the stairs or elevator?");
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	
 				}
-
-			}
-			else if (prompt == 6){
-				try {
-					myText1 = "Would you like to hear directions or see a map?";
-					myTextToSpeech.speak(myText1, TextToSpeech.QUEUE_FLUSH, null);
-					Thread.currentThread();
-					Thread.sleep(3000);
-					intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Would you like to hear directions or see a map?");
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				else if (prompt == 6){
+					try {
+						myText1 = "Would you like to hear directions or see a map?";
+						myTextToSpeech.speak(myText1, TextToSpeech.QUEUE_FLUSH, null);
+						Thread.currentThread();
+						Thread.sleep(3000);
+						intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Would you like to hear directions or see a map?");
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	
 				}
-
-			}
-					
-			// Given an hint to the recognizer about what the user is going to say
-			intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-			        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-			
-			// Specify how many results you want to receive. The results will be sorted
-			// where the first result is the one with higher confidence.
-			intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 10);
-			
-			// Specify the recognition language. This parameter has to be specified only if the
-			// recognition has to be done in a specific language and not the default one (i.e., the
-			// system locale). Most of the applications do not have to set this parameter.
-			intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.ENGLISH);
-			
-		    startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
+						
+				// Given an hint to the recognizer about what the user is going to say
+				intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+				        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+				
+				// Specify how many results you want to receive. The results will be sorted
+				// where the first result is the one with higher confidence.
+				intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 10);
+				
+				// Specify the recognition language. This parameter has to be specified only if the
+				// recognition has to be done in a specific language and not the default one (i.e., the
+				// system locale). Most of the applications do not have to set this parameter.
+				intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.ENGLISH);
+				
+			    startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
+		  	}
 	    }
 	    
 	    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -460,7 +442,6 @@ public class LawsonNavigatorActivity extends Activity
 	    			startActivity(installTTS);
 	    		}
 	    	}
-	    	
 	    	else if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
 	    		ArrayList<String> results;
 	    		results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
@@ -479,6 +460,9 @@ public class LawsonNavigatorActivity extends Activity
 		    		else if (results.get(0).equals("a non academic room")){
 		    			prompt = 3;
 		    			startVoiceRecognitionActivity();
+		    		}
+		    		else if (results.get(0).equals("fuck you")){
+		    			easterEgg();
 		    		}
 		    		else{
 		    			prompt = 0;
@@ -575,7 +559,7 @@ public class LawsonNavigatorActivity extends Activity
 	    				displayOption = Display.TEXTSPEECH;
 	    				prompt = 0;
 	    			}
-	    			else if (results.get(0).equals("map")){
+	    			else if (results.get(0).equals("see a map")){
 	    				displayOption = Display.MAP;
 	    				prompt = 0;
 	    			}
@@ -592,62 +576,7 @@ public class LawsonNavigatorActivity extends Activity
 	    		saved.setRoomNumber(roomNumber);
 	    		saved.setTransport(transport);
 	    		
-	    		//Sending stuff to server
-    			/*Socket kkSocket = null;
-			PrintWriter out = null;
-			BufferedReader in = null;
-			ObjectInputStream ois = null;
-			ObjectOutputStream oos = null;
-	
-			//The IP address of moore01	
-			byte[] IP = new byte[4];
-			IP[0] = (byte) 128;
-			IP[1] = (byte) 10;
-			IP[2] = (byte) 12;
-			IP[3] = (byte) 131;
-
-			try {
-			    kkSocket = new Socket(InetAddress.getByAddress(IP), 4444);
-			    out = new PrintWriter(kkSocket.getOutputStream(), true);
-			    in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
-				ois = new ObjectInputStream(kkSocket.getInputStream());
-				oos = new ObjectOutputStream(kkSocket.getOutputStream());
-			} catch (UnknownHostException e) {
-			    System.err.println("Cannot find the host.");
-			    System.exit(1);
-			} catch (IOException e) {
-			    System.err.println("Couldn't get I/O for the connection to the host.");
-			    System.exit(1);
-			}
-			
-			try{
-				oos.writeObject(saved);
-			}catch(Exception e){
-				System.out.println("oos error");
-				e.printStackTrace();
-				System.exit(1);
-			}
-
-    			//Toast.makeText(getApplicationContext(), in.readLine(), Toast.LENGTH_SHORT).show();
-    			
-    			try {
-				out.close();
-				in.close();
-				oos.close();
-				ois.close();
-				kkSocket.close();
-			}catch (IOException e) {
-				e.printStackTrace();
-				System.exit(1);
-			}
-    			
-    			
-    			//Toast.makeText(getApplicationContext(), getProfMap.getRoomNumber() + ":" + getProfMap.getFloor() + ":" + getProfMap.getTransport(), Toast.LENGTH_SHORT).show();
-    			/*Intent i = new Intent();
-				i.setClassName("com.LawsonNavigator.org", "com.LawsonNavigator.org.LawsonNavigatorActivity");
-				startActivity(i);
-    		}
-    	});*/
+	    		sendTTSdata();
 	    		
 	    		check1 = false;
 	    		check2 = false;
@@ -655,8 +584,116 @@ public class LawsonNavigatorActivity extends Activity
 	    	}
 	    	super.onActivityResult(requestCode, resultCode, data);
 	    }
+	    
+	@SuppressWarnings("unchecked")
+	public void sendTTSdata()
+	{
+		//Sending stuff to server
+		Socket kkSocket = null;
+		PrintWriter out = null;
+		BufferedReader in = null;
+		ObjectInputStream ois = null;
+		ObjectOutputStream oos = null;
+		InputStream is = null;
+		FileOutputStream fos = null;
+
+		//The IP address of moore01	
+		byte[] IP = new byte[4];
+		IP[0] = (byte) 128;
+		IP[1] = (byte) 10;
+		IP[2] = (byte) 12;
+		IP[3] = (byte) 131;
+
+		try {
+		    kkSocket = new Socket(InetAddress.getByAddress(IP), 9999);
+		    out = new PrintWriter(kkSocket.getOutputStream(), true);
+		    in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
+			ois = new ObjectInputStream(kkSocket.getInputStream());
+			oos = new ObjectOutputStream(kkSocket.getOutputStream());
+			is = kkSocket.getInputStream();
+		} catch (UnknownHostException e) {
+		    System.err.println("Cannot find the host.");
+		    System.exit(1);
+		} catch (IOException e) {
+		    System.err.println("Couldn't get I/O for the connection to the host.");
+		    System.exit(1);
+		}
+		
+		try{
+			oos.writeObject(saved);
+		}catch(Exception e){
+			System.out.println("oos error");
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		//get input from server
+		ArrayList<Byte> images1 = new ArrayList<Byte>();
+		ArrayList<String> textDirections1 = new ArrayList<String>();
+		ArrayList<Point> points1 = new ArrayList<Point>();
+		ArrayList<Byte> images2 = new ArrayList<Byte>();
+		ArrayList<String> textDirections2 = new ArrayList<String>();
+		ArrayList<Point> points2 = new ArrayList<Point>();
+		
+		ContextWrapper cw = new ContextWrapper(getApplicationContext());
+
+		try
+		{
+			//read in first image, if there
+			System.out.println("about to read images1");
+			images1 = (ArrayList<Byte>)ois.readObject();
+			ImageZoomActivity.mapArray1 = new byte[images1.size()];
+			
+			for (int i = 0; i < images1.size(); i++)
+			{
+				ImageZoomActivity.mapArray1[i] = images1.get(i).byteValue();
+			}
+			
+			//read in first directions, if there
+			textDirections1 = (ArrayList<String>)ois.readObject();
+			directions1 = textDirections1.toString();
+			//System.out.println(directions1);
+			
+			//read in first point, if there
+			points1 = (ArrayList<Point>)ois.readObject();
+			
+			//read in second image, if there
+			images2 = (ArrayList<Byte>)ois.readObject();
+			ImageZoomActivity.mapArray2 = new byte[images2.size()];
+			
+			for (int i = 0; i < images2.size(); i++)
+			{
+				ImageZoomActivity.mapArray2[i] = images2.get(i).byteValue();
+			}
+			
+			//read in second directions, if there
+			textDirections2 = (ArrayList<String>)ois.readObject();
+			directions2 = textDirections2.toString();
+			
+			//read in second points, if there
+			points2 = (ArrayList<Point>)ois.readObject();
+			
+			
+		}catch(Exception e){
+			System.err.println("Error in recieving data from the server");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		finish();
+		
+		Intent i = new Intent();
+		if (displayOption == Display.MAP)
+			i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.MapScreen");
+		else if (displayOption == Display.TEXTSPEECH)
+		{
+			TextView.directions += directions1;
+			TextView.directions2 += directions2;
+			i.setClassName("com.purdue.LawsonNavigator", "com.purdue.LawsonNavigator.TextView");
+		}
+		startActivity(i);
+	}
 	
-	/*
 	public void updateLocation(Location loc)
 	{
 		if (loc != null)
@@ -669,7 +706,6 @@ public class LawsonNavigatorActivity extends Activity
 			Toast.makeText(context, "No Location Found", Toast.LENGTH_SHORT);
 		}
 	}
-*/
 
 	public LocationListener getLocListen() {
 		return locListen;
@@ -679,15 +715,8 @@ public class LawsonNavigatorActivity extends Activity
 		this.locListen = locListen;
 	}
 	
-	/*
-    public void toast(String buttonPressed)
-    {
-    	Context context = getApplicationContext();
-    	CharSequence text = buttonPressed;
-    	int duration = Toast.LENGTH_LONG;
-    	
-    	Toast toast = Toast.makeText(context, text, duration);
-    	toast.show();
-    }
-*/
+	public void easterEgg()
+	{
+		Toast.makeText(getApplicationContext(), "No, Fuck You!", Toast.LENGTH_LONG).show();
+	}
 }

@@ -8,22 +8,17 @@ Unfinished and not linked with main program
 
 package com.purdue.LawsonNavigator;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Locale;
+
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.Engine;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
-
-import java.util.ArrayList;
 
 public class Voice_Recognition extends Activity{
 	  private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
